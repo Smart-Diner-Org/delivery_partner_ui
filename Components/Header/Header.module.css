@@ -1,0 +1,36 @@
+.header {
+  width: 100%;
+  display: flex;
+  background-color: white;
+  justify-content: space-between;
+  padding: 0.5em;
+  align-items: center;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  z-index: 9;
+  height: 55px;
+}
+
+.header h1 {
+  margin-bottom: 0;
+}
+
+.userIcon svg {
+  height: 30px;
+  width: 30px;
+  color: red;
+}
+
+ .toggle_icon {
+  cursor: pointer;
+  color: #000466;
+  font-size: x-large;
+  display: none;
+}
+
+@media screen and (max-width: 700px) {
+  .toggle_icon {
+    display: inline;
+  }
+}

@@ -1,0 +1,15 @@
+.ordercard {
+  padding: 20px;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+  display: grid;
+  width: auto;
+  max-width: 250px;
+  margin: 20px;
+  max-height: 200px;
+  box-shadow: 0 1px 6px rgb(0 4 102 / 40%), 0 1px 12px rgb(0 4 102 / 30%);
+  background-color: white;
+}

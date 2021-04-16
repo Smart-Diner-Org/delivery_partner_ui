@@ -14,3 +14,30 @@ a {
 * {
   box-sizing: border-box;
 }
+
+@import url("https://fonts.googleapis.com/css2?family=Lato&family=MuseoModerno:wght@700&display=swap");
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+p {
+  font-family: "Lato";
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+ul {
+  padding: 0px;
+}
+button {
+  cursor: pointer;
+}
+button:focus {
+  outline: none;
+}
+

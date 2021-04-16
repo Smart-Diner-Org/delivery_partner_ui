@@ -1,0 +1,27 @@
+.login_layout {
+  display: grid;
+  place-items: center;
+}
+.login_cover {
+  background: url(https://smart-diner.s3.ap-south-1.amazonaws.com/landing+page/page_banner.png);
+  background-size: cover;
+  background-position: 100%;
+  width: 100%;
+  min-height: 420px;
+  /* mask-image: linear-gradient(to bottom, rgb(30, 5, 122), rgba(235, 235, 241, 0)); */
+}
+.login_cover h1 {
+  margin: 50px;
+  color: white;
+  font-family: "MuseoModerno";
+}
+.login_card {
+  margin-top: -30%;
+  min-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgb(0 4 102 / 40%), 0 1px 12px rgb(0 4 102 / 30%);
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}

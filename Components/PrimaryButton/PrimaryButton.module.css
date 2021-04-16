@@ -1,0 +1,16 @@
+.primary_button {
+  padding: 0.5em 1em;
+  border: 2px solid #000466;
+  background-color: white;
+  color: #000466;
+  display: flex;
+  font-size: 14px;
+  font-family: "MuseoModerno";
+  align-items: center;
+  justify-content: center;
+}
+
+.primary_button:hover{
+    background-color: #000466;
+    color: white;
+}
