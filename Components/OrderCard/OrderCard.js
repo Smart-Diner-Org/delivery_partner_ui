@@ -1,9 +1,9 @@
-import { Modal, Row, Col, Select, notification } from "antd";
+import { Modal, Row, Col, Select, notification, Button } from "antd";
 import React from "react";
 import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import styles from "./OrderCard.module.css";
 import axios from "axios";
-import { tokenName } from "../../Constant";
+import { okText, tokenName, toUpdateDeliveryStage } from "../../Constant";
 
 const { Option } = Select;
 
@@ -15,15 +15,18 @@ function OrderCard({ orderDetail }) {
     setVisible(true);
   };
 
-  const handleOk = () => {
+  const handleOk = (stage) => {
     setConfirmLoading(true);
+    const data = {
+      deliveryRequestStageId: stage,
+    };
     axios
       .post(
-        `https://testingapi.smartdiner.co/after_login/order/accept_delivery/${orderDetail.delivery_requests[0].id}`,
-        "",
+        `https://testingapi.smartdiner.co/after_login/order/update_delivery_request_stage/${orderDetail.delivery_requests[0].id}`,
+        data,
         {
           headers: {
-            "x-access-token": `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzYsImlhdCI6MTYxODU4ODUzNiwiZXhwIjoxNjE4Njc0OTM2fQ.sJ6m1brClqmq0k0OrIxcqr2U7lh7QUixqQSV1DzqpT0`,
+            "x-access-token": `${localStorage.getItem(tokenName)}`,
           },
         }
       )
@@ -31,7 +34,7 @@ function OrderCard({ orderDetail }) {
         console.log(resp);
         notification.success({
           message: "Success!",
-          description: "Order Accepted",
+          description: "Delivery stage updated...!",
         });
         setConfirmLoading(false);
         handleCancel();
@@ -59,11 +62,41 @@ function OrderCard({ orderDetail }) {
       </div>
       <Modal
         visible={visible}
-        onOk={handleOk}
-        title="Order #191 details"
+        title={`Order #${orderDetail.delivery_requests[0].id} details`}
         confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-        okText="Accept"
+        okText={okText[orderDetail.delivery_requests[0].delivery_stage_id]}
+        footer={
+          [5, 3, 7].includes(
+            Number(orderDetail.delivery_requests[0].delivery_stage_id)
+          ) ? (
+            <Button key="back" onClick={handleCancel}>
+              Return
+            </Button>
+          ) : (
+            <>
+              <Button
+                key="back"
+                onClick={() => {
+                  handleOk(3);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="primary"
+                onClick={() =>
+                  handleOk(
+                    toUpdateDeliveryStage[
+                      orderDetail.delivery_requests[0].delivery_stage_id
+                    ]
+                  )
+                }
+              >
+                {okText[orderDetail.delivery_requests[0].delivery_stage_id]}
+              </Button>
+            </>
+          )
+        }
       >
         <Row>
           <Col span={8}>PickUp Location :</Col>

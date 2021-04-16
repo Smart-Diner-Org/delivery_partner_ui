@@ -1,50 +1,44 @@
 import React, { useState } from "react";
 import styles from "./NavTab.module.css";
 import DoubleLeftOutlined from "@ant-design/icons/DoubleLeftOutlined";
+import { deliveryStages } from "../../Constant";
 
-const deliveryStages = [
-  {
-    name: "Requested Delivery",
-    count: 12,
-    orderStages: [1],
-    type: "fresh",
-    color: "#fb8238",
-  },
-  {
-    name: "Ongoing Delivery",
-    count: 32,
-    orderStages: [2, 3, 4, 5],
-    type: "onGoing",
-    color: "#ffc009",
-  },
-  {
-    name: "Completed Delivery",
-    count: 1,
-    orderStages: [6],
-    type: "outForDelivery",
-    color: "#08a860",
-  },
-  {
-    name: "Cancelled Delivery",
-    count: 24,
-    orderStages: [7, 8, 9],
-    type: "old",
-    color: "#e22a28",
-  },
-];
-
-function NavTab({sideBarToggle,sideBarClose}) {
+function NavTab({
+  sideBarToggle,
+  sideBarClose,
+  setSelectedDeliveryStage,
+  selectedDeliveryStage,
+  count,
+}) {
   return (
     <>
       <div className={styles.navbar_desktop}>
         {deliveryStages.map((stage) => (
-          <button style={{ backgroundColor: `${stage.color}` }}>
+          <button
+            key={stage.color}
+            style={
+              JSON.stringify(selectedDeliveryStage) ===
+              JSON.stringify(stage.deliveryStages)
+                ? {
+                    backgroundColor: `${stage.color}`,
+                    outline: "2px solid #000466",
+                    outlineOffset: "6px",
+                  }
+                : { backgroundColor: `${stage.color}` }
+            }
+            onClick={() => setSelectedDeliveryStage(stage.deliveryStages)}
+          >
             <p>{stage.name}</p>
-            {Number(stage.count) > 0 ? <label>{stage.count}</label> : ""}
+            {Number(count[stage.countKey]) > 0 && (
+              <label>{count[stage.countKey]}</label>
+            )}
           </button>
         ))}
       </div>
-      <div className={styles.side_menu} style={sideBarToggle?{ left: "0px" }:{}}>
+      <div
+        className={styles.side_menu}
+        style={sideBarToggle ? { left: "0px" } : {}}
+      >
         {/* <div className="logo">
           <Link to="/">
             <img className="img-fluid" loading="lazy" src={Logo} alt="" />
@@ -52,23 +46,33 @@ function NavTab({sideBarToggle,sideBarClose}) {
         </div> */}
         <ul className="menu-left">
           {deliveryStages.map((stage) => (
-            <button className={styles.orderstage_btn}>
+            <button
+              key={stage.color}
+              className={styles.orderstage_btn}
+              onClick={() => setSelectedDeliveryStage(stage.deliveryStages)}
+              style={
+                JSON.stringify(selectedDeliveryStage) ===
+                JSON.stringify(stage.deliveryStages)
+                  ? {
+                      backgroundColor: "white",
+                      color: "#000466",
+                    }
+                  : {}
+              }
+            >
               <p>{stage.name}</p>
-              {Number(stage.count) > 0 && (
+              {Number(count[stage.countKey]) > 0 && (
                 <div
                   className={styles.count_box}
                   style={{ backgroundColor: `${stage.color}` }}
                 >
-                  {stage.count}
+                  {count[stage.countKey]}
                 </div>
               )}
             </button>
           ))}
         </ul>
-        <button
-          className={styles.hide_sideMenu_btn}
-          onClick={sideBarClose}
-        >
+        <button className={styles.hide_sideMenu_btn} onClick={sideBarClose}>
           <DoubleLeftOutlined />
           <label>Back</label>
         </button>

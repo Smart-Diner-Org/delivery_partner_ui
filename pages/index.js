@@ -8,12 +8,18 @@ import { useRouter } from "next/router";
 import { notification } from "antd";
 import { tokenName } from "../Constant";
 
-const Main = ({ orders }) => {
+const Main = ({ orders, selectedDeliveryStage }) => {
   return (
     <div className={styles.orderCard_container}>
-      {orders.map((order) => (
-        <OrderCard key={order.id} orderDetail={order} />
-      ))}
+      {orders.map((order) => {
+        if (
+          selectedDeliveryStage.includes(
+            Number(order?.delivery_requests[0].delivery_stage_id)
+          )
+        ) {
+          return <OrderCard key={order.id} orderDetail={order} />;
+        }
+      })}
     </div>
   );
 };
@@ -22,6 +28,13 @@ export default function Home() {
   const [sideBarToggle, setSideBarToggle] = useState(false);
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
+  const [selectedDeliveryStage, setSelectedDeliveryStage] = useState([1]);
+  const [count, setCount] = useState({
+    requestCount: 1,
+    onGoingCount: 0,
+    completedCount: 0,
+    cancelledCount: 0,
+  });
   const router = useRouter();
 
   React.useEffect(() => {
@@ -37,6 +50,7 @@ export default function Home() {
       .then((resp) => {
         setOrdersLoading(false);
         setOrders(resp.data);
+        calculateCount(resp.data);
       })
       .catch((err) => {
         notification.error({
@@ -47,47 +61,52 @@ export default function Home() {
       });
   }, []);
 
+  const calculateCount = (orders) => {
+    let requestCount = 0;
+    let onGoingCount = 0;
+    let completedCount = 0;
+    let cancelledCount = 0;
+    orders.map((order) => {
+      if ([1].includes(Number(order.delivery_requests[0].delivery_stage_id))) {
+        requestCount = requestCount + 1;
+      } else if (
+        [2, 4, 6].includes(Number(order.delivery_requests[0].delivery_stage_id))
+      ) {
+        onGoingCount = onGoingCount + 1;
+      } else if (
+        [5].includes(Number(order.delivery_requests[0].delivery_stage_id))
+      ) {
+        completedCount = completedCount + 1;
+      } else if (
+        [3, 7].includes(Number(order.delivery_requests[0].delivery_stage_id))
+      ) {
+        cancelledCount = cancelledCount + 1;
+      }
+    });
+
+    setCount({
+      requestCount: requestCount,
+      onGoingCount: onGoingCount,
+      completedCount: completedCount,
+      cancelledCount: cancelledCount,
+    });
+  };
+
   return (
     <div className={styles.home}>
       <Header sideBarOpen={() => setSideBarToggle(true)} />
       <NavTab
         sideBarClose={() => setSideBarToggle(false)}
         sideBarToggle={sideBarToggle}
+        selectedDeliveryStage={selectedDeliveryStage}
+        setSelectedDeliveryStage={setSelectedDeliveryStage}
+        count={count}
       />
-      {ordersLoading ? <div>Loading...</div> : <Main orders={orders} />}
+      {ordersLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <Main orders={orders} selectedDeliveryStage={selectedDeliveryStage} />
+      )}
     </div>
   );
 }
-
-// export async function getStaticProps() {
-//   let data;
-//   axios
-//     .get(
-//       "https://testingapi.smartdiner.co/after_login/delivery_agent/get_all_delivery_requests",
-//       {
-//         headers: {
-//           "x-access-token": `${localStorage.getItem("token")}`,
-//         },
-//       }
-//     )
-//     .then((resp) => {
-//       console.log(resp.data);
-//       data = [{ id: 1 }, { id: 1 }, { id: 1 }, { id: 1 }];
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//     });
-
-//   if (!data) {
-//     return {
-//       redirect: {
-//         destination: "/login",
-//         permanent: false,
-//       },
-//     };
-//   }
-
-//   return {
-//     props: { data }, // will be passed to the page component as props
-//   };
-// }
