@@ -1,13 +1,12 @@
 import { Modal, Row, Col, Select, notification, Button } from "antd";
 import React from "react";
-import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import styles from "./OrderCard.module.css";
 import axios from "axios";
 import { okText, tokenName, toUpdateDeliveryStage } from "../../Constant";
 
 const { Option } = Select;
 
-function OrderCard({ orderDetail }) {
+function OrderCard({ orderDetail, fetchData }) {
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
 
@@ -31,13 +30,17 @@ function OrderCard({ orderDetail }) {
         }
       )
       .then((resp) => {
-        console.log(resp);
+        let message =
+          stage === 3
+            ? "You cancelled delivery request"
+            : "Delivery stage updated...!";
         notification.success({
           message: "Success!",
-          description: "Delivery stage updated...!",
+          description: message,
         });
         setConfirmLoading(false);
         handleCancel();
+        fetchData();
       })
       .catch((err) => {
         notification.error({
@@ -54,49 +57,46 @@ function OrderCard({ orderDetail }) {
 
   return (
     <>
-      <div className={styles.ordercard}>
-        <p>#{orderDetail.delivery_requests[0].id}</p>
+      <div className={styles.ordercard} onClick={showModal}>
+        <p>#{orderDetail.id}</p>
         <p>{orderDetail.restuarant_branch.restaurant.name}</p>
         <p>{orderDetail.restuarant_branch.address}</p>
-        <PrimaryButton name={"View"} onClick={showModal} />
       </div>
       <Modal
         visible={visible}
         title={`Order #${orderDetail.delivery_requests[0].id} details`}
         confirmLoading={confirmLoading}
-        okText={okText[orderDetail.delivery_requests[0].delivery_stage_id]}
-        footer={
-          [5, 3, 7].includes(
-            Number(orderDetail.delivery_requests[0].delivery_stage_id)
-          ) ? (
-            <Button key="back" onClick={handleCancel}>
-              Return
-            </Button>
-          ) : (
-            <>
-              <Button
-                key="back"
-                onClick={() => {
-                  handleOk(3);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="primary"
-                onClick={() =>
-                  handleOk(
-                    toUpdateDeliveryStage[
-                      orderDetail.delivery_requests[0].delivery_stage_id
-                    ]
-                  )
-                }
-              >
-                {okText[orderDetail.delivery_requests[0].delivery_stage_id]}
-              </Button>
-            </>
-          )
-        }
+        onCancel={handleCancel}
+        footer={[
+          <Button
+            key="back"
+            onClick={() =>
+              [5, 3, 7].includes(
+                Number(orderDetail.delivery_requests[0].delivery_stage_id)
+              )
+                ? handleCancel()
+                : handleOk(3)
+            }
+          >
+            {[5, 3, 7].includes(
+              Number(orderDetail.delivery_requests[0].delivery_stage_id)
+            )
+              ? "Return"
+              : "Cancel Delivery"}
+          </Button>,
+          <Button
+            type="primary"
+            onClick={() =>
+              handleOk(
+                toUpdateDeliveryStage[
+                  orderDetail.delivery_requests[0].delivery_stage_id
+                ]
+              )
+            }
+          >
+            {okText[orderDetail.delivery_requests[0].delivery_stage_id]}
+          </Button>,
+        ]}
       >
         <Row>
           <Col span={8}>PickUp Location :</Col>

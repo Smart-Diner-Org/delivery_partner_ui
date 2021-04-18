@@ -33,6 +33,6 @@ export const deliveryStages = [
   },
 ];
 
-export const okText = { 1: "Accept", 2: "Completed" };
+export const okText = { 1: "Accept Delivery", 2: "Delivery Completed" };
 
 export const toUpdateDeliveryStage = { 1: 2, 2: 5 };

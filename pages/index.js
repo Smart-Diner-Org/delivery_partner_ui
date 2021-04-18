@@ -5,10 +5,10 @@ import OrderCard from "../Components/OrderCard/OrderCard";
 import NavTab from "../Components/NavTab/NavTab";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { notification } from "antd";
+import { notification, Spin } from "antd";
 import { tokenName } from "../Constant";
 
-const Main = ({ orders, selectedDeliveryStage }) => {
+const Main = ({ orders, selectedDeliveryStage, fetchData }) => {
   return (
     <div className={styles.orderCard_container}>
       {orders.map((order) => {
@@ -17,7 +17,13 @@ const Main = ({ orders, selectedDeliveryStage }) => {
             Number(order?.delivery_requests[0].delivery_stage_id)
           )
         ) {
-          return <OrderCard key={order.id} orderDetail={order} />;
+          return (
+            <OrderCard
+              key={order.id}
+              orderDetail={order}
+              fetchData={fetchData}
+            />
+          );
         }
       })}
     </div>
@@ -38,9 +44,13 @@ export default function Home() {
   const router = useRouter();
 
   React.useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
     axios
       .get(
-        "https://testingapi.smartdiner.co/after_login/delivery_agent/get_all_delivery_requests",
+        `https://testingapi.smartdiner.co/after_login/delivery_agent/get_all_delivery_requests`,
         {
           headers: {
             "x-access-token": `${localStorage.getItem(tokenName)}`,
@@ -59,7 +69,7 @@ export default function Home() {
         });
         router.push("/login");
       });
-  }, []);
+  };
 
   const calculateCount = (orders) => {
     let requestCount = 0;
@@ -103,9 +113,13 @@ export default function Home() {
         count={count}
       />
       {ordersLoading ? (
-        <div>Loading...</div>
+        <Spin size="large" style={{ marginTop: "30%", marginLeft: "50%" }} />
       ) : (
-        <Main orders={orders} selectedDeliveryStage={selectedDeliveryStage} />
+        <Main
+          orders={orders}
+          fetchData={fetchData}
+          selectedDeliveryStage={selectedDeliveryStage}
+        />
       )}
     </div>
   );
