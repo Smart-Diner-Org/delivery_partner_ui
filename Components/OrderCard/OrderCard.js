@@ -21,7 +21,7 @@ function OrderCard({ orderDetail, fetchData }) {
     };
     axios
       .post(
-        `${process.env.NEXT_PUBLIC_DB_BASE_URL}/after_login/order/accept_delivery/${orderDetail.id}`,
+        `${process.env.NEXT_PUBLIC_DB_BASE_URL}/after_login/order/accept_delivery/${orderDetail.delivery_requests[0].id}`,
         data,
         {
           headers: {
@@ -64,7 +64,7 @@ function OrderCard({ orderDetail, fetchData }) {
       </div>
       <Modal
         visible={visible}
-        title={`Order #${orderDetail.delivery_requests[0].id} details`}
+        title={`Order #${orderDetail.id} details`}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
         footer={[
