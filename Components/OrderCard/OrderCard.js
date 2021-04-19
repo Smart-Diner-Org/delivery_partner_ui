@@ -21,7 +21,7 @@ function OrderCard({ orderDetail, fetchData }) {
     };
     axios
       .post(
-        `https://testingapi.smartdiner.co/after_login/order/update_delivery_request_stage/${orderDetail.delivery_requests[0].id}`,
+        `${process.env.NEXT_PUBLIC_DB_BASE_URL}/after_login/order/accept_delivery/${orderDetail.id}`,
         data,
         {
           headers: {

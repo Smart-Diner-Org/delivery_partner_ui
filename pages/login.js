@@ -17,10 +17,8 @@ export default function Login() {
       password: values.password,
     };
     axios
-      .post(`https://testingapi.smartdiner.co/auth/signin`, data)
+      .post(`${process.env.NEXT_PUBLIC_DB_BASE_URL}/auth/signin`, data)
       .then((res) => {
-        console.log(res);
-
         if (Number(res.data.roleId) === deliveryPartnerRoleID) {
           localStorage.setItem(tokenName, res.data.accessToken);
           localStorage.setItem(userName, res.data.username);

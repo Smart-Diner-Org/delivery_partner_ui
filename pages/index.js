@@ -50,7 +50,7 @@ export default function Home() {
   const fetchData = () => {
     axios
       .get(
-        `https://testingapi.smartdiner.co/after_login/delivery_agent/get_all_delivery_requests`,
+        `${process.env.NEXT_PUBLIC_DB_BASE_URL}/after_login/delivery_agent/get_all_delivery_requests`,
         {
           headers: {
             "x-access-token": `${localStorage.getItem(tokenName)}`,
