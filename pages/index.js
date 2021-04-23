@@ -45,7 +45,7 @@ export default function Home() {
 
   React.useEffect(() => {
     const getCookie = document.cookie;
-    const accessToken = getCookie.split("=")[1];
+    const accessToken = getCookie?.split("=")[1];
     localStorage.setItem(tokenName, accessToken);
     fetchData();
   }, []);
