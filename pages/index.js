@@ -6,7 +6,8 @@ import NavTab from "../Components/NavTab/NavTab";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { notification, Spin } from "antd";
-import { tokenName } from "../Constant";
+import { tokenName, cookieName } from "../Constant";
+import Cookies from "js-cookie";
 
 const Main = ({ orders, selectedDeliveryStage, fetchData }) => {
   return (
@@ -44,10 +45,10 @@ export default function Home() {
   const router = useRouter();
 
   React.useEffect(() => {
-    const getCookie = document.cookie;
-    const accessToken = getCookie?.split("=");
-    if (accessToken && accessToken[0] === "domainRedirectPass") {
-      localStorage.setItem(tokenName, accessToken[1]);
+    const accessToken = Cookies.get(cookieName);
+    if (accessToken) {
+      localStorage.setItem(tokenName, accessToken);
+      Cookies.remove(cookieName);
     }
     fetchData();
   }, []);
