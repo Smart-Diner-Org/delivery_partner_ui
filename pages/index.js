@@ -45,8 +45,10 @@ export default function Home() {
 
   React.useEffect(() => {
     const getCookie = document.cookie;
-    const accessToken = getCookie?.split("=")[1];
-    localStorage.setItem(tokenName, accessToken);
+    const accessToken = getCookie?.split("=");
+    if (accessToken && accessToken[0] === "domainRedirectPass") {
+      localStorage.setItem(tokenName, accessToken[1]);
+    }
     fetchData();
   }, []);
 

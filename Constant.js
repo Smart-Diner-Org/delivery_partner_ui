@@ -1,4 +1,4 @@
-export const tokenName = "deliveryAgentAccesToken";
+export const tokenName = "token_deliveryPartner";
 export const userName = "userName";
 export const deliveryPartnerRoleID = 6;
 

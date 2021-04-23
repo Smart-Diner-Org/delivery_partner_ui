@@ -1,4 +1,4 @@
-import { Layout, Form, Input, Card, Row, Col } from "antd";
+import { Layout, Form, Input, Card, notification } from "antd";
 import PrimaryButton from "../Components/PrimaryButton/PrimaryButton";
 import styles from "../styles/Login.module.css";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
@@ -19,7 +19,6 @@ export default function Login() {
     axios
       .post(`${process.env.NEXT_PUBLIC_DB_BASE_URL}/auth/signin`, data)
       .then((res) => {
-        console.log(res);
         if (Number(res.data.roleId) === deliveryPartnerRoleID) {
           localStorage.setItem(tokenName, res.data.accessToken);
           localStorage.setItem(userName, res.data.username);
@@ -28,6 +27,10 @@ export default function Login() {
       })
       .catch((error) => {
         console.log(error);
+        notification.error({
+          message: "Error! Try Again",
+          description: `${error?.response?.data?.message}`,
+        });
       });
   };
   return (
