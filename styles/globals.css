@@ -21,8 +21,13 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-p {
+p,
+div {
   font-family: "Lato";
+}
+
+button {
+  font-family: "MuseoModerno";
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
@@ -40,4 +45,3 @@ button {
 button:focus {
   outline: none;
 }
-

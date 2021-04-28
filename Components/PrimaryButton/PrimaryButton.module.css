@@ -1,5 +1,6 @@
 .primary_button {
-  padding: 0.5em 1em;
+  padding: 4px 15px;
+  margin: 0.35em;
   border: 2px solid #000466;
   background-color: white;
   color: #000466;
@@ -10,7 +11,7 @@
   justify-content: center;
 }
 
-.primary_button:hover{
-    background-color: #000466;
-    color: white;
+.primary_button:hover {
+  background-color: #000466;
+  color: white;
 }

@@ -2,6 +2,7 @@ import { Modal, Row, Col, Select, notification, Button } from "antd";
 import React from "react";
 import styles from "./OrderCard.module.css";
 import axios from "axios";
+import PrimaryButton from "../PrimaryButton/PrimaryButton";
 import { okText, tokenName, toUpdateDeliveryStage } from "../../Constant";
 
 const { Option } = Select;
@@ -68,34 +69,43 @@ function OrderCard({ orderDetail, fetchData }) {
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
         footer={[
-          <Button
-            key="back"
-            onClick={() =>
-              [5, 3, 7].includes(
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              key="back"
+              type="primary"
+              style={{ margin: "0.35em" }}
+              danger
+              onClick={() =>
+                [5, 3, 7].includes(
+                  Number(orderDetail.delivery_requests[0].delivery_stage_id)
+                )
+                  ? handleCancel()
+                  : handleOk(3)
+              }
+            >
+              {[5, 3, 7].includes(
                 Number(orderDetail.delivery_requests[0].delivery_stage_id)
               )
-                ? handleCancel()
-                : handleOk(3)
-            }
-          >
-            {[5, 3, 7].includes(
+                ? "Return"
+                : "Cancel Delivery"}
+            </Button>
+            {![5, 3, 7].includes(
               Number(orderDetail.delivery_requests[0].delivery_stage_id)
-            )
-              ? "Return"
-              : "Cancel Delivery"}
-          </Button>,
-          <Button
-            type="primary"
-            onClick={() =>
-              handleOk(
-                toUpdateDeliveryStage[
-                  orderDetail.delivery_requests[0].delivery_stage_id
-                ]
-              )
-            }
-          >
-            {okText[orderDetail.delivery_requests[0].delivery_stage_id]}
-          </Button>,
+            ) && (
+              <PrimaryButton
+                name={
+                  okText[orderDetail.delivery_requests[0].delivery_stage_id]
+                }
+                onClick={() =>
+                  handleOk(
+                    toUpdateDeliveryStage[
+                      orderDetail.delivery_requests[0].delivery_stage_id
+                    ]
+                  )
+                }
+              />
+            )}
+          </div>,
         ]}
       >
         <Row>
