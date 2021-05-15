@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "deploy-testing": "next build && next export && aws s3 sync ./out/ s3://${S3_BUCKET_NAME}/ --profile smartdiner",
+    "deploy-main": "next build && next export && aws s3 sync ./out/ s3://{S3_BUCKET_NAME}/ --profile smartdiner"
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
