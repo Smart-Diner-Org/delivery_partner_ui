@@ -17,7 +17,7 @@ export default function Login() {
       password: values.password,
     };
     axios
-      .post(`${process.env.NEXT_PUBLIC_DB_BASE_URL}/auth/signin`, data)
+      .post(`${process.env.API_BASE_URL}/auth/signin`, data)
       .then((res) => {
         if (Number(res.data.roleId) === deliveryPartnerRoleID) {
           localStorage.setItem(tokenName, res.data.accessToken);

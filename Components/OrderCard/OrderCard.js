@@ -22,7 +22,7 @@ function OrderCard({ orderDetail, fetchData }) {
     };
     axios
       .post(
-        `${process.env.NEXT_PUBLIC_DB_BASE_URL}/after_login/order/update_delivery_request_stage/${orderDetail.delivery_requests[0].id}`,
+        `${process.env.API_BASE_URL}/after_login/order/update_delivery_request_stage/${orderDetail.delivery_requests[0].id}`,
         data,
         {
           headers: {
